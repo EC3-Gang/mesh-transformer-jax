@@ -22,6 +22,5 @@ uvicorn
 lm_dataformat
 pathy
 chex==0.1.2
-jaxlib==0.1.68
 dm-haiku==0.0.5
 jax[tpu]>=0.2.20 -f https://storage.googleapis.com/jax-releases/libtpu_releases.html
