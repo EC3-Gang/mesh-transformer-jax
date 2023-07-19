@@ -54,6 +54,8 @@ if __name__ == "__main__":
     cores_per_replica = params["cores_per_replica"]
 
     bucket = params["bucket"]
+    if bucket == 'local':
+        bucket = ''
     model_dir = params["model_dir"]
     layers = params["layers"]
     d_model = params["d_model"]
