@@ -55,11 +55,11 @@ def save(network, step, bucket, path, mp, aux=None, keep_n=3, delete_old=True):
         aux = {}
 
     try:
-        with open(f"gs://{bucket}/{path}/meta.json", "r") as f:
+        with open(f"{path}/meta.json", "r") as f:
             meta = json.load(f)
     except:
         # create metadata file
-        with open(f"gs://{bucket}/{path}/meta.json", "w") as f:
+        with open(f"{path}/meta.json", "w") as f:
             json.dump({
                 "step": 0,
                 "checkpoints": [],
@@ -70,11 +70,11 @@ def save(network, step, bucket, path, mp, aux=None, keep_n=3, delete_old=True):
     start = time.time()
     res = []
     for shard_id in range(mp):
-        write_ckpt(network.state, f"gs://{bucket}/{path}/step_{step}/", shard_id)
+        write_ckpt(network.state, f"{path}/step_{step}/", shard_id)
 
     print(f"Wrote checkpoint in {time.time() - start:.06}s")
 
-    with open(f"gs://{bucket}/{path}/meta.json", "r") as f:
+    with open(f"{path}/meta.json", "r") as f:
         meta = json.load(f)
 
     meta["step"] = step
@@ -101,7 +101,7 @@ def save(network, step, bucket, path, mp, aux=None, keep_n=3, delete_old=True):
     all_aux[step] = aux
     meta["aux"] = all_aux
 
-    with open(f"gs://{bucket}/{path}/meta.json", "w") as f:
+    with open(f"{path}/meta.json", "w") as f:
         json.dump(meta, f)
 
 
@@ -209,7 +209,7 @@ if __name__ == "__main__":
         print('`--tune_model_path` not passed: we are continuing a fine-tuning run from a checkpoint (or we are not fine-tuning)')
         fine_tuning = False
         initial_ckpt_model_dir = model_dir
-        initial_ckpt_path = f"gs://{bucket}/{initial_ckpt_model_dir}"
+        initial_ckpt_path = f"{initial_ckpt_model_dir}"
         meta_path = f"{initial_ckpt_path}/meta.json"
 
         try:
