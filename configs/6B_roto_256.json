@@ -22,12 +22,11 @@
   "tpu_size": 8,
 
   "bucket": "local",
-  "model_dir": "/mnt/disks/persist/checkpoint/step_383500",
+  "model_dir": "/mnt/disks/persist/checkpoint/out",
 
   "train_set": "pile.train.index",
   "val_set": {
-    "pile": "pile.val.index",
-    "owt": "openwebtext2_new_inputs.val.index"
+    "pile": "pile.val.index"
   },
 
   "eval_harness_tasks": [
