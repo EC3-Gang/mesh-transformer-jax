@@ -8,6 +8,7 @@ from typing import Callable
 import numpy as np
 
 from mesh_transformer.train_actor import NetworkRunner
+from google.cloud import storage
 from smart_open import open
 from func_timeout import func_set_timeout
 
