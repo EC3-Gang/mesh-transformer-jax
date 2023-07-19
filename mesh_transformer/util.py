@@ -34,8 +34,8 @@ def global_norm(updates, use_psum=True):
 
 
 class ClipByGlobalNormState(OptState):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+    def __init__(self, *args):
+        super().__init__(*args)
 
 
 
