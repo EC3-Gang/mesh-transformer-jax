@@ -33,9 +33,7 @@ def global_norm(updates, use_psum=True):
     return jnp.sqrt(pre_sqrt)
 
 
-class ClipByGlobalNormState:
-    """The `clip_by_global_norm` transformation is stateless."""
-
+class ClipByGlobalNormState(OptState):
 
 
 
