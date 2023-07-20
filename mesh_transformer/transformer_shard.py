@@ -15,7 +15,7 @@ from mesh_transformer.checkpoint import read_ckpt, write_ckpt, write_ckpt_v2, lo
 from mesh_transformer.layers import EmbeddingShard, TransformerLayerShard, RelativePositionEmbs, ProjectionShard, \
     TransformerLayerShardV2, Projection, EmbeddingShardV2
 from mesh_transformer.util import to_f32, to_bf16, maybe_shard, head_print, global_norm
-from jax.experimental import PartitionSpec as P
+from jax.sharding import PartitionSpec as P
 
 
 class CausalTransformerShard(hk.Module):
@@ -146,7 +146,7 @@ class CausalTransformer:
                 val_grad_fn = jax.value_and_grad(train_loss_fn, has_aux=True)
                 (loss, last_loss), grad = val_grad_fn(to_bf16(state["params"]), ctx, tgt)
 
-                new_grad = jax.tree_multimap(lambda a, b: a + b, old_grad, grad)
+                new_grad = jax.tree_map(lambda a, b: a + b, old_grad, grad)
                 gnorm = global_norm(grad)
                 return new_grad, (loss, last_loss, gnorm)
 
@@ -478,7 +478,7 @@ class CausalTransformerV2:
         head_print("sharding strategy:")
         # head_print("state shard: ", state_shard)
         # head_print("param_shapes: ", param_shapes)
-        jax.tree_multimap(head_print, state_shard, param_shapes)
+        jax.tree_map(head_print, state_shard, param_shapes)
 
         self.init_pjit = pjit(init, in_axis_resources=(None, P("dp")), out_axis_resources=state_shard)
 
@@ -523,7 +523,7 @@ class CausalTransformerV2:
                 val_grad_fn = jax.value_and_grad(train_apply_fn, has_aux=True, allow_int=True)
                 (loss, last_loss), grad = val_grad_fn(bf16_params, ctx, tgt)
 
-                new_grad = jax.tree_multimap(lambda a, b: a + b, old_grad, grad)
+                new_grad = jax.map(lambda a, b: a + b, old_grad, grad)
                 return new_grad, (loss, last_loss)
 
             if ctx.shape[0] == 1:
