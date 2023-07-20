@@ -32,6 +32,8 @@ One future direction for research is integrating this codebase with
 
 https://github.com/kingoflolz/mesh-transformer-jax/issues/246
 
+Use V2-Alpha for the TPU VM software
+
 
 ## Updates
 
