@@ -115,7 +115,7 @@ if __name__ == "__main__":
     mesh_shape = (jax.device_count() // cores_per_replica, cores_per_replica)
     devices = np.array(jax.devices()).reshape(mesh_shape)
 
-    with open(f"gs://{bucket}/{model_dir}/meta.json", "r") as f:
+    with open(f"{model_dir}/meta.json", "r") as f:
         meta = json.load(f)
 
     ckpt_step = meta["checkpoints"][-1]
@@ -126,7 +126,7 @@ if __name__ == "__main__":
         network = CausalTransformer(params)
 
         start = time.time()
-        network.state = read_ckpt(network.state, f"gs://{bucket}/{model_dir}/step_{ckpt_step}/", devices.shape[1])
+        network.state = read_ckpt(network.state, f"{model_dir}/step_{ckpt_step}/", devices.shape[1])
         print(f"network loaded in {time.time() - start:.06}s")
 
         local_shards = max(jax.local_device_count() // mesh_shape[1], 1)

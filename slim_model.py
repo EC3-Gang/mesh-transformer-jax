@@ -53,7 +53,7 @@ if __name__ == "__main__":
     mesh_shape = (jax.device_count() // cores_per_replica, cores_per_replica)
     devices = np.array(jax.devices()).reshape(mesh_shape)
 
-    with open(f"gs://{bucket}/{model_dir}/meta.json", "r") as f:
+    with open(f"{model_dir}/meta.json", "r") as f:
         meta = json.load(f)
 
     if args.ckpt_step > -1:
@@ -66,7 +66,7 @@ if __name__ == "__main__":
         network = CausalTransformer(params)
 
         start = time.time()
-        network.state = read_ckpt(network.state, f"gs://{bucket}/{model_dir}/step_{ckpt_step}/", devices.shape[1])
+        network.state = read_ckpt(network.state, f"{model_dir}/step_{ckpt_step}/", devices.shape[1])
         print(f"network loaded in {time.time() - start:.06}s")
 
         start = time.time()
@@ -78,5 +78,5 @@ if __name__ == "__main__":
         suffix = "_slim_f16" if args.f16 else "_slim"
 
         for i in range(cores_per_replica):
-            write_ckpt(network.state, f"gs://{bucket}/{model_dir}{suffix}/step_{ckpt_step}/", i)
+            write_ckpt(network.state, f"{model_dir}{suffix}/step_{ckpt_step}/", i)
             print(f"written shard {i}")
