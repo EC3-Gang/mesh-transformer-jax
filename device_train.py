@@ -47,7 +47,7 @@ def parse_args():
     return args
 
 
-def save(network, step, bucket, path, mp, aux=None, keep_n=3, delete_old=True):
+def save(network, step, path, mp, aux=None, keep_n=3, delete_old=True):
     assert path
     client = storage.Client()
 
@@ -91,7 +91,7 @@ def save(network, step, bucket, path, mp, aux=None, keep_n=3, delete_old=True):
 
         if delete_old:
             print(f"deleting checkpoint {ckpt_to_delete}")
-            for blob in client.list_blobs(bucket, prefix=f"{path}/step_{ckpt_to_delete}/"):
+            for blob in client.list_blobs(prefix=f"{path}/step_{ckpt_to_delete}/"):
                 # print(f"deleting {blob.name}")
                 assert path in blob.name
                 blob.delete()
@@ -299,7 +299,7 @@ if __name__ == "__main__":
         while True:
             if (step % ckpt_every == 1) or step == total_steps:
                 print(f"saving a checkpoint for step {step}")
-                save(network, step, bucket, model_dir,
+                save(network, step, model_dir,
                      mp=cores_per_replica,
                      aux={"train_loader": train_dataset.get_state()},
                      delete_old=True,
