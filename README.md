@@ -28,6 +28,11 @@ parallelism strategies should be used. See other implementations such as
 One future direction for research is integrating this codebase with
 [swarm-jax](https://github.com/kingoflolz/swarm-jax), to achieve further scalability with pipeline parallelism.
 
+# Dependency Guide
+
+https://github.com/kingoflolz/mesh-transformer-jax/issues/246
+
+
 ## Updates
 
 **12-07-21**: Added [guide to fine tuning](howto_finetune.md)
